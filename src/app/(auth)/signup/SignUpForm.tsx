@@ -22,7 +22,7 @@ import LoadingButton from "@/components/LoadingButton";
 export default function SignUpForm() {
   const [error, setError] = useState<string>();
 
-  const [isPending, startTransition ] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -33,11 +33,11 @@ export default function SignUpForm() {
   });
 
   async function onSubmit(values: SignUpValues) {
-    setError(undefined)
+    setError(undefined);
     startTransition(async () => {
-        const {error} = await signUp(values);
-        if (error) setError(error);
-    })
+      const { error } = await signUp(values);
+      if (error) setError(error);
+    });
   }
 
   return (
