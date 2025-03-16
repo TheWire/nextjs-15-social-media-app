@@ -23,6 +23,6 @@ export default function UserAvatar({
         "aspect-square h-fit flex-none rounded-full bg-secondary object-cover",
         className,
       )}
-    ></Image>
+    />
   );
 }

@@ -12,7 +12,7 @@ export default async function Layout({
 }) {
   const session = await validateRequest();
 
-  if (!session.user) redirect("/");
+  if (!session.user) redirect("/signup");
 
   return (
     <SessionProvider value={session}>
