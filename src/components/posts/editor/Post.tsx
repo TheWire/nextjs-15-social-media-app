@@ -8,7 +8,7 @@ interface PostProps {
 }
 export default function Post({ post }: PostProps) {
   return (
-    <article className="rounded-2xl space-y-3 bg-card p-5 shadow-sm">
+    <article className="space-y-3 rounded-2xl bg-card p-5 shadow-sm">
       <div className="flex flex-wrap gap-3">
         <Link
           href={`/users/${post.user.username}`}
@@ -27,7 +27,7 @@ export default function Post({ post }: PostProps) {
             href={`/posts/${post.id}`}
             className="block text-sm text-muted-foreground hover:underline"
           >
-            {/* {formatRelativeDate(post.createdAt)} */}
+            {formatRelativeDate(post.createdAt)}
           </Link>
         </div>
       </div>
