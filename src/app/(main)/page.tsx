@@ -1,7 +1,7 @@
 import Image from "next/image";
 import PostEditor from "@/components/posts/editor/PostEditor";
 import { prisma } from "@/lib/prisma";
-import Post from "@/components/posts/editor/Post";
+import Post from "@/components/posts/Post";
 import { postDataInclude, type PostData } from "@/lib/types";
 import TrendsSidebar from "@/components/TrendsSidebar";
 import ForYouFeed from "./ForYouFeed";

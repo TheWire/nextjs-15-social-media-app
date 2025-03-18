@@ -1,5 +1,5 @@
 import { Skeleton } from "../ui/skeleton";
-import Post from "./editor/Post";
+import Post from "./Post";
 
 export default function PostsLoadingSkeleton() {
   return (
