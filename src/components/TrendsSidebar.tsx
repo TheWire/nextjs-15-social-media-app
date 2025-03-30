@@ -8,6 +8,7 @@ import { unstable_cache } from "next/dist/server/web/spec-extension/unstable-cac
 import { formatNumber } from "@/lib/utils";
 import FollowButton from "./FollowButton";
 import { getUserDataSelect } from "@/lib/types";
+import UserTooltip from "./UserTooltip";
 
 export default function TrendsSidebar() {
   return (
@@ -46,12 +47,14 @@ async function WhoToFollow() {
       <div className="text-xl font-bold">Who To follow</div>
       {userToFollow.map((user) => (
         <div key={user.id} className="flex items-center justify-between gap-3">
-          <Link
-            href={`users/${user.username}`}
-            className="flex items-center gap-3"
-          >
-            <UserAvatar avatarUrl={user.avatarUrl} className="flex-none" />
-          </Link>
+          <UserTooltip user={user}>
+            <Link
+              href={`users/${user.username}`}
+              className="flex items-center gap-3"
+            >
+              <UserAvatar avatarUrl={user.avatarUrl} className="flex-none" />
+            </Link>
+          </UserTooltip>
           <div>
             <p className="line-clamp-1 break-all font-semibold hover:underline">
               {user.displayName}
