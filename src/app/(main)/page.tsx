@@ -1,8 +1,8 @@
 import PostEditor from "@/components/posts/editor/PostEditor";
 import TrendsSidebar from "@/components/TrendsSidebar";
-import ForYouFeed from "./ForYouFeed";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FollowingFeed from "./FollowingFeed";
+import ForYouFeed from "./ForYouFeed";
 
 export default function Home() {
   return (
@@ -21,7 +21,6 @@ export default function Home() {
             <FollowingFeed />
           </TabsContent>
         </Tabs>
-        <ForYouFeed />
       </div>
       <TrendsSidebar />
     </main>

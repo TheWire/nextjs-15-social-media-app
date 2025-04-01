@@ -49,7 +49,7 @@ export default async function Page({ params: { username } }: PageProps) {
   if (!loggedInUser) {
     return (
       <p className="text-destructive">
-        You&getNodeAtPosition;re not authorized to view this page.
+        You&apos;re not authorized to view this page.
       </p>
     );
   }
