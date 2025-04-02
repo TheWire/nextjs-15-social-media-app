@@ -6,9 +6,8 @@ import { NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
   try {
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
-    const { user } = await validateRequest();
-
     const pageSize = 10;
+    const { user } = await validateRequest();
 
     if (!user) {
       return Response.json(
