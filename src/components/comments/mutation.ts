@@ -30,7 +30,7 @@ export function useSubmitCommentMutation(postId: string) {
                   previousCursor: firstPage.previousCursor,
                   comments: [...firstPage.comments, newComment],
                 },
-                ...oldData.pages.slice(10),
+                ...oldData.pages.slice(1),
               ],
             };
           }
