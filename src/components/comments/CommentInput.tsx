@@ -1,5 +1,5 @@
 import { PostData } from "@/lib/types";
-import { useSubmitCommentMutation } from "./mutation";
+import { useSubmitCommentMutation } from "./mutations";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
