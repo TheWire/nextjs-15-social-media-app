@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { lucia } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect";
+import streamServerClient from "@/lib/stream";
 
 export async function signUp(
   credentionals: SignUpValues,
@@ -54,14 +55,22 @@ export async function signUp(
       };
     }
 
-    await prisma.user.create({
-      data: {
+    await prisma.$transaction(async (tx) => {
+      await tx.user.create({
+        data: {
+          id: userId,
+          email,
+          username,
+          displayName: username,
+          passwordHash,
+        },
+      });
+
+      await streamServerClient.upsertUser({
         id: userId,
-        email,
         username,
-        displayName: username,
-        passwordHash,
-      },
+        name: username,
+      });
     });
 
     const session = await lucia.createSession(userId, {});
