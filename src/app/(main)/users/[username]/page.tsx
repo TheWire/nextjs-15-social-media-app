@@ -12,6 +12,7 @@ import { cache } from "react";
 import UserPosts from "./UserPosts";
 import Linkify from "@/components/Linkify";
 import EditProfileButton from "./EditProfileButton";
+import { Metadata } from "next";
 
 interface PageProps {
   params: { username: string };
@@ -33,7 +34,9 @@ const getUser = cache(async (username: string, loggedInUserId: string) => {
   return user;
 });
 
-export async function generateMetadata({ params: { username } }: PageProps) {
+export async function generateMetadata({
+  params: { username },
+}: PageProps): Promise<Metadata> {
   const { user: loggedInUser } = await validateRequest();
   if (!loggedInUser) return {};
 
@@ -76,7 +79,7 @@ interface UserProfileProps {
   loggedInUserId: string;
 }
 
-export function UserProfile({ user, loggedInUserId }: UserProfileProps) {
+async function UserProfile({ user, loggedInUserId }: UserProfileProps) {
   const followerInfo: FollowerInfo = {
     followers: user._count.followers,
     isFollowedByUser: user.followers.some(
