@@ -8,7 +8,11 @@ import { PostsPage } from "@/lib/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
-export default function FollowingFeed() {
+interface SearchResultProps {
+  query: string;
+}
+
+export default function SearchResults({ query }: SearchResultProps) {
   const {
     data,
     fetchNextPage,
@@ -17,16 +21,19 @@ export default function FollowingFeed() {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["post-feed", "following"],
+    queryKey: ["post-feed", "search", query],
     queryFn: ({ pageParam }) =>
       kyInstance
-        .get(
-          "/api/posts/following",
-          pageParam ? { searchParams: { cursor: pageParam } } : {},
-        )
+        .get("/api/search", {
+          searchParams: {
+            q: query,
+            ...(pageParam ? { cursor: pageParam } : {}),
+          },
+        })
         .json<PostsPage>(),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
+    gcTime: 0,
   });
 
   const posts = data?.pages.flatMap((page) => page.posts) || [];
@@ -38,7 +45,7 @@ export default function FollowingFeed() {
   if (status == "success" && !posts.length && !hasNextPage) {
     return (
       <p className="text-center text-muted-foreground">
-        No posts found. Start following people to see their posts here.
+        No posts found for this query.
       </p>
     );
   }
