@@ -49,20 +49,21 @@ async function WhoToFollow() {
         <div key={user.id} className="flex items-center justify-between gap-3">
           <UserTooltip user={user}>
             <Link
-              href={`users/${user.username}`}
+              href={`/users/${user.username}`}
               className="flex items-center gap-3"
             >
               <UserAvatar avatarUrl={user.avatarUrl} className="flex-none" />
+
+              <div>
+                <p className="line-clamp-1 break-all font-semibold hover:underline">
+                  {user.displayName}
+                </p>
+                <p className="line-clamp-1 break-all text-muted-foreground">
+                  @{user.username}
+                </p>
+              </div>
             </Link>
           </UserTooltip>
-          <div>
-            <p className="line-clamp-1 break-all font-semibold hover:underline">
-              {user.displayName}
-            </p>
-            <p className="line-clamp-1 break-all text-muted-foreground">
-              @{user.username}
-            </p>
-          </div>
           <FollowButton
             userId={user.id}
             initialState={{
