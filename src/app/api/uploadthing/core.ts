@@ -6,6 +6,35 @@ import { UploadThingError, UTApi } from "uploadthing/server";
 
 const f = createUploadthing();
 
+function getUrl(url: string) {
+  const newApiRegex = new RegExp(
+    `^https://${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}\\.ufs\\.sh/f/[a-zA-Z0-9-_]+$`,
+  );
+  const oldApiRegex = /^https:\/\/utfs\.io\/f\/[a-zA-Z0-9-_]+$/;
+  if (newApiRegex.test(url)) {
+    return url;
+  } else if (oldApiRegex.test(url)) {
+    return url.replace(
+      "/f/",
+      `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
+    );
+  } else {
+    console.log("path not matched")
+    return undefined;
+  }
+}
+
+function getDeleteKey(url: string) {
+  const newApiRegex = new RegExp(
+    `^https://${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}\\.ufs\\.sh/f/[a-zA-Z0-9-_]+$`,
+  );
+  const oldApiRegex = /^https:\/\/utfs\.io\/f\/[a-zA-Z0-9-_]+$/;
+  if (newApiRegex.test(url)) {
+    return url.split(`/f/[a-zA-Z0-9-_]+$`)[1];
+  }
+  return url.split(`/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`)[1];
+}
+
 export const fileRouter = {
   avatar: f({
     image: { maxFileSize: "512KB" },
@@ -18,17 +47,14 @@ export const fileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       const oldAvatarUrl = metadata.user.avatarUrl;
+
       if (oldAvatarUrl) {
-        const key = oldAvatarUrl.split(
-          `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
-        )[1];
+        const key = getDeleteKey(oldAvatarUrl);
         await new UTApi().deleteFiles(key);
       }
-      const newAvatarUrl = file.url.replace(
-        "/f/",
-        `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
-      );
 
+      const newAvatarUrl = getUrl(file.url);
+      if (!newAvatarUrl) throw new UploadThingError("Got invalid avatar url");
       await Promise.all([
         prisma.user.update({
           where: { id: metadata.user.id },
@@ -56,12 +82,11 @@ export const fileRouter = {
       return {};
     })
     .onUploadComplete(async ({ file }) => {
+      const newUrl = getUrl(file.url);
+      if (!newUrl) throw new UploadThingError("Got invalid media url");
       const media = await prisma.media.create({
         data: {
-          url: file.url.replace(
-            "/f/",
-            `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
-          ),
+          url: newUrl,
           type: file.type.startsWith("image") ? "IMAGE" : "VIDEO",
         },
       });
